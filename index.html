@@ -1,0 +1,841 @@
+<!doctype html>
+<html lang="it" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MICELIO · Corso esperienziale sulle connessioni viventi</title>
+<meta name="description" content="Quattro giorni nel bosco, in due weekend, per ritrovare le connessioni che sostengono la vita. Prima edizione in organizzazione: lascia il tuo interesse.">
+<meta name="theme-color" content="#14281f">
+<meta property="og:title" content="MICELIO · Corso esperienziale sulle connessioni viventi">
+<meta property="og:description" content="Non siamo visitatori della natura. Siamo parte di essa. Quattro giorni nel bosco, due weekend, una rete da riscoprire.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2314281f'/%3E%3Cpath d='M16 28V16M16 16C12 14 9 11 8 6M16 16c4-2 7-5 8-10M16 22c-3-1-5-3-6-6M16 22c3-1 5-3 6-6' fill='none' stroke='%23e8b25a' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<script>document.documentElement.className='js'</script>
+<style>
+/* =====================================================================
+   1. TOKEN — unica fonte dei valori. Fuori da :root solo var(--...).
+   Coppie di contrasto dichiarate:
+   testo/carta, tenue/carta, carta/azione, luce/bosco, errore/carta
+   ===================================================================== */
+:root{
+  /* spazio */
+  --spazio-1:4px; --spazio-2:8px; --spazio-3:12px; --spazio-4:16px; --spazio-5:20px;
+  --spazio-6:24px; --spazio-8:32px; --spazio-10:40px; --spazio-12:48px; --spazio-16:64px; --spazio-20:96px;
+  /* tipografia */
+  --font-testo:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  --font-titolo:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --t-corpo:1.0625rem; --t-piccolo:.9375rem; --t-lead:1.25rem;
+  --t-h3:1.375rem; --t-h2:clamp(1.75rem,1.2rem + 2.4vw,2.5rem);
+  --t-h1:clamp(2.75rem,1.4rem + 7.5vw,6rem);
+  --interlinea:1.65; --interlinea-titolo:1.15; --misura:62ch; --larghezza:68rem;
+  /* colore: superfici */
+  --c-carta:#f4f1e8; --c-carta-2:#ebe6d6; --c-bosco:#14281f; --c-bosco-2:#1f3a2c;
+  /* colore: testo */
+  --c-testo:#1c2b22; --c-tenue:#465a4e; --c-su-bosco:#f4f1e8; --c-su-bosco-tenue:#c9d3c5;
+  /* colore: azione e accenti */
+  --c-azione:#2f5d3a; --c-azione-hover:#244a2e; --c-azione-testo:#f4f1e8;
+  --c-luce:#e8b25a; --c-luce-velo:rgba(232,178,90,.30); --c-acqua:#5f8f9a; --c-suolo:#8a6a45;
+  --c-bordo:#6c7b70; --c-filo:#7fa88a; --c-filo-chiaro:#a9c7b0; --c-velo:rgba(20,40,31,.55);
+  /* colore: semantici */
+  --c-successo:#2f5d3a; --c-avviso:#8a4b08; --c-errore:#a32a2a;
+  /* forma e movimento */
+  --raggio:10px; --raggio-grande:20px; --feedback:140ms; --transizione:320ms; --bersaglio:48px;
+  --ombra:0 1px 2px rgba(20,40,31,.08),0 8px 24px rgba(20,40,31,.08);
+}
+
+/* =====================================================================
+   2. BASE
+   ===================================================================== */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:var(--spazio-20);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--c-carta);color:var(--c-testo);font:var(--t-corpo)/var(--interlinea) var(--font-testo);padding-bottom:calc(var(--spazio-16) + env(safe-area-inset-bottom))}
+[hidden]{display:none !important}
+img,svg{max-width:100%;display:block}
+h1,h2,h3{font-family:var(--font-titolo);font-weight:600;line-height:var(--interlinea-titolo);margin:0 0 var(--spazio-4);text-wrap:balance}
+h2{font-size:var(--t-h2)}
+h3{font-size:var(--t-h3)}
+p{margin:0 0 var(--spazio-4);max-width:var(--misura);text-wrap:pretty}
+ul{margin:0;padding:0;list-style:none}
+a{color:inherit;text-underline-offset:.2em}
+:focus-visible{outline:3px solid var(--c-luce);outline-offset:3px;border-radius:var(--spazio-1)}
+.su-chiaro :focus-visible,.modulo :focus-visible,.carta :focus-visible{outline-color:var(--c-azione)}
+.salta{position:absolute;left:var(--spazio-2);top:-120px;z-index:100;background:var(--c-carta);color:var(--c-testo);padding:var(--spazio-3) var(--spazio-4);border-radius:var(--raggio)}
+.salta:focus{top:var(--spazio-2)}
+.contenitore{width:100%;max-width:var(--larghezza);margin:0 auto;padding:0 var(--spazio-5)}
+.sezione{padding:var(--spazio-16) 0}
+.sovratitolo{display:block;margin:0 0 var(--spazio-3);font:600 var(--t-piccolo)/1.3 var(--font-testo);letter-spacing:.14em;text-transform:uppercase;color:var(--c-tenue)}
+.lead{font-size:var(--t-lead);line-height:1.55}
+
+/* Pulsanti */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--spazio-2);min-height:var(--bersaglio);padding:var(--spazio-3) var(--spazio-6);border:2px solid var(--c-azione);border-radius:999px;background:var(--c-azione);color:var(--c-azione-testo);font:600 var(--t-corpo)/1.2 var(--font-testo);text-decoration:none;cursor:pointer;transition:background var(--feedback),transform var(--feedback),border-color var(--feedback)}
+.btn:hover{background:var(--c-azione-hover);border-color:var(--c-azione-hover)}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.75;cursor:progress}
+.btn--luce{background:var(--c-luce);border-color:var(--c-luce);color:var(--c-bosco)}
+.btn--luce:hover{background:var(--c-carta);border-color:var(--c-carta)}
+.btn--lieve{background:transparent;color:inherit;border-color:currentColor}
+.btn--lieve:hover{background:var(--c-azione);color:var(--c-azione-testo)}
+
+/* =====================================================================
+   3. INTESTAZIONE
+   ===================================================================== */
+.testata{position:fixed;inset:0 0 auto 0;z-index:50;transition:background var(--transizione),box-shadow var(--transizione)}
+.testata__riga{display:flex;align-items:center;justify-content:space-between;gap:var(--spazio-4);min-height:var(--spazio-16)}
+.marchio{display:inline-flex;align-items:center;min-height:var(--bersaglio);font:600 1.125rem/1 var(--font-titolo);letter-spacing:.28em;color:var(--c-su-bosco);text-decoration:none}
+.testata nav ul{display:flex;align-items:center;gap:var(--spazio-6)}
+.testata nav a:not(.btn){display:none;color:var(--c-su-bosco);font-size:var(--t-piccolo);text-decoration:none;padding:var(--spazio-2) 0}
+.testata nav a:not(.btn):hover{text-decoration:underline}
+.testata .btn{min-height:44px;padding:var(--spazio-2) var(--spazio-4);font-size:var(--t-piccolo);white-space:nowrap}
+@media (max-width:23rem){.marchio{letter-spacing:.14em;font-size:1rem}.testata .btn{padding:var(--spazio-2) var(--spazio-3)}}
+.solo-largo{display:none}
+@media (min-width:30rem){.solo-largo{display:inline}}
+.testata.piena{background:var(--c-bosco);box-shadow:var(--ombra)}
+@media (min-width:52rem){ .testata nav a:not(.btn){display:inline-block} }
+
+/* =====================================================================
+   4. APERTURA (hero)
+   ===================================================================== */
+.apertura{position:relative;isolation:isolate;overflow:hidden;background:var(--c-bosco);color:var(--c-su-bosco);padding:calc(var(--spazio-20) + var(--spazio-8)) 0 var(--spazio-20);min-height:min(100svh,56rem);display:flex;align-items:center}
+.apertura::before{content:"";position:absolute;inset:0;z-index:-2;background:radial-gradient(70% 60% at 78% -5%,var(--c-luce-velo),transparent 70%),linear-gradient(180deg,var(--c-bosco-2),var(--c-bosco) 70%)}
+.apertura__rete{position:absolute;inset:auto 0 0 0;z-index:-1;width:100%;height:42%;opacity:.55}
+@media (min-width:52rem){.apertura__rete{left:auto;width:58%;height:70%;opacity:.9}}
+.apertura__alberi{position:absolute;inset:0;z-index:-1;width:100%;height:100%;opacity:.5}
+.rete path{fill:none;stroke:var(--c-filo);stroke-width:1.6;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.rete .sottile{stroke:var(--c-filo-chiaro);stroke-width:1;opacity:.55}
+.rete circle{fill:var(--c-luce)}
+.alberi rect{fill:var(--c-bosco)}
+.alberi .raggio{fill:var(--c-luce-velo)}
+.apertura h1{font-size:var(--t-h1);letter-spacing:.12em;margin:0 0 var(--spazio-4);font-weight:500;line-height:1}
+.apertura .sottotitolo{font:500 var(--t-lead)/1.4 var(--font-testo);color:var(--c-luce);margin:0 0 var(--spazio-6);max-width:32ch}
+.apertura .promessa{color:var(--c-su-bosco);max-width:40ch}
+.apertura .motto{font:italic 500 var(--t-h3)/1.3 var(--font-titolo);margin:var(--spazio-8) 0 var(--spazio-8);max-width:26ch}
+.apertura__azioni{display:flex;flex-wrap:wrap;gap:var(--spazio-4);align-items:center}
+.apertura__nota{margin:var(--spazio-4) 0 0;color:var(--c-su-bosco-tenue);font-size:var(--t-piccolo);max-width:46ch}
+.fatti{display:flex;flex-wrap:wrap;gap:var(--spazio-2) var(--spazio-6);margin:var(--spazio-8) 0 0;color:var(--c-su-bosco-tenue);font-size:var(--t-piccolo)}
+.fatti li{display:flex;align-items:center;gap:var(--spazio-2)}
+.fatti li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c-luce)}
+
+/* =====================================================================
+   5. PERCHÉ + MISSIONE
+   ===================================================================== */
+.perche{display:grid;gap:var(--spazio-10)}
+.perche__testo p{font-size:var(--t-lead);line-height:1.6}
+.perche__testo p.forte{font:italic 500 var(--t-h3)/1.35 var(--font-titolo);color:var(--c-azione)}
+.perche__cerchi{display:none}
+@media (min-width:52rem){
+  .perche{grid-template-columns:1.2fr .8fr;align-items:center;gap:var(--spazio-16)}
+  .perche__cerchi{display:block}
+}
+.cerchi .anello{fill:none;stroke:var(--c-filo);stroke-width:1.4;vector-effect:non-scaling-stroke}
+.cerchi .nodo{fill:var(--c-azione)}
+.cerchi .nodo--luce{fill:var(--c-luce)}
+.cerchi .nodo--acqua{fill:var(--c-acqua)}
+.cerchi .nodo--suolo{fill:var(--c-suolo)}
+.cerchi text{font:600 11px var(--font-testo);fill:var(--c-testo);letter-spacing:.08em;text-transform:uppercase}
+
+.missione{background:var(--c-carta-2)}
+.missione__intro{margin-bottom:var(--spazio-10)}
+.fili{display:grid;gap:var(--spazio-4);counter-reset:filo}
+.fili li{position:relative;padding:var(--spazio-5) var(--spazio-5) var(--spazio-5) var(--spazio-16);background:var(--c-carta);border-radius:var(--raggio);border:1px solid var(--c-carta-2);box-shadow:var(--ombra);counter-increment:filo}
+.fili li::before{content:counter(filo);position:absolute;left:var(--spazio-4);top:var(--spazio-4);width:var(--spazio-8);height:var(--spazio-8);border-radius:50%;display:grid;place-items:center;background:var(--c-bosco);color:var(--c-luce);font:600 var(--t-piccolo)/1 var(--font-titolo)}
+@media (min-width:52rem){.fili{grid-template-columns:repeat(2,1fr)}.fili li:last-child{grid-column:1/-1}}
+.nota-metodo{margin-top:var(--spazio-8);padding-left:var(--spazio-5);border-left:3px solid var(--c-luce);color:var(--c-tenue)}
+
+/* =====================================================================
+   6. PERCORSO
+   ===================================================================== */
+.percorso__intro{margin-bottom:var(--spazio-12)}
+.tempo{position:relative;display:grid;gap:var(--spazio-12)}
+.tempo::before{content:"";position:absolute;left:15px;top:var(--spazio-4);bottom:var(--spazio-4);width:2px;background:linear-gradient(var(--c-filo),var(--c-filo-chiaro))}
+.tappa{position:relative;padding-left:var(--spazio-12)}
+.tappa::before{content:"";position:absolute;left:6px;top:var(--spazio-2);width:20px;height:20px;border-radius:50%;background:var(--c-carta);border:4px solid var(--c-azione)}
+.tappa--ponte::before{border-color:var(--c-luce);border-style:dashed}
+.tappa__etichetta{display:block;margin:0 0 var(--spazio-1);font:600 var(--t-piccolo)/1.3 var(--font-testo);letter-spacing:.14em;text-transform:uppercase;color:var(--c-azione)}
+.tappa h3.tappa__titolo{font-size:var(--t-h2);margin-bottom:var(--spazio-6)}
+.porte{display:grid;gap:var(--spazio-4)}
+@media (min-width:52rem){.porte{grid-template-columns:repeat(2,1fr)}.tappa{padding-left:var(--spazio-16)}}
+.carta{background:var(--c-carta);border:1px solid var(--c-bordo);border-radius:var(--raggio-grande);padding:var(--spazio-6);box-shadow:var(--ombra);transition:transform var(--transizione),border-color var(--feedback)}
+.carta:hover{border-color:var(--c-azione)}
+.carta__testa{display:flex;gap:var(--spazio-4);align-items:flex-start;margin-bottom:var(--spazio-4)}
+.icona{flex:none;width:var(--spazio-12);height:var(--spazio-12);border-radius:50%;display:grid;place-items:center;background:var(--c-bosco)}
+.icona svg{width:28px;height:28px;fill:none;stroke:var(--c-luce);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.icona--acqua svg{stroke:var(--c-filo-chiaro)}
+.carta__giorno{display:block;font:600 .8125rem/1.3 var(--font-testo);letter-spacing:.14em;text-transform:uppercase;color:var(--c-tenue)}
+.carta h4{margin:var(--spazio-1) 0 0;font:600 var(--t-h3)/1.2 var(--font-titolo)}
+.carta__sotto{margin:var(--spazio-1) 0 0;color:var(--c-tenue);font-size:var(--t-piccolo)}
+.domanda{margin:0 0 var(--spazio-4);padding:var(--spazio-3) var(--spazio-4);border-radius:var(--raggio);background:var(--c-carta-2);font:italic 500 var(--t-corpo)/1.45 var(--font-titolo)}
+.carta p.descr{font-size:var(--t-piccolo)}
+details.dettaglio{border-top:1px solid var(--c-carta-2)}
+details.dettaglio summary{display:flex;align-items:center;justify-content:space-between;gap:var(--spazio-3);min-height:var(--bersaglio);padding:var(--spazio-2) 0;cursor:pointer;font-weight:600;list-style:none;color:var(--c-azione)}
+details.dettaglio summary::-webkit-details-marker{display:none}
+details.dettaglio summary::after{content:"+";flex:none;width:var(--spazio-6);height:var(--spazio-6);display:grid;place-items:center;border:2px solid currentColor;border-radius:50%;font-size:1.125rem;line-height:1;transition:transform var(--transizione)}
+details.dettaglio[open] summary::after{content:"–"}
+.elenco{padding:var(--spazio-1) 0 var(--spazio-2)}
+.elenco li{position:relative;padding:var(--spazio-1) 0 var(--spazio-1) var(--spazio-6);font-size:var(--t-piccolo)}
+.elenco li::before{content:"";position:absolute;left:var(--spazio-1);top:.7em;width:8px;height:8px;border-radius:50%;background:var(--c-luce)}
+.ponte{background:var(--c-carta-2);border-style:dashed;box-shadow:none}
+.ponte p{max-width:var(--misura)}
+
+/* =====================================================================
+   7. COME VIVREMO (testa, cuore, mani)
+   ===================================================================== */
+.metodo{background:var(--c-bosco);color:var(--c-su-bosco)}
+.metodo .sovratitolo{color:var(--c-luce)}
+.metodo h2{max-width:22ch}
+.metodo .lead{color:var(--c-su-bosco-tenue)}
+.tre{display:grid;gap:var(--spazio-4);margin:var(--spazio-10) 0}
+@media (min-width:52rem){.tre{grid-template-columns:repeat(3,1fr)}}
+.tre li{padding:var(--spazio-6);border:1px solid var(--c-filo);border-radius:var(--raggio-grande);background:var(--c-bosco-2)}
+.tre h3{margin-bottom:var(--spazio-2);color:var(--c-luce);font-size:var(--t-h3)}
+.tre h3 span{display:block;font:600 var(--t-piccolo)/1.3 var(--font-testo);letter-spacing:.14em;color:var(--c-su-bosco)}
+.tre p{margin:0;color:var(--c-su-bosco-tenue);font-size:var(--t-piccolo)}
+.ispirazioni{color:var(--c-su-bosco-tenue);font-size:var(--t-piccolo);max-width:var(--misura)}
+
+/* =====================================================================
+   8. PER CHI + INFO
+   ===================================================================== */
+.griglia-2{display:grid;gap:var(--spazio-12)}
+@media (min-width:52rem){.griglia-2{grid-template-columns:1fr 1fr;gap:var(--spazio-16)}}
+.spunte li{position:relative;padding:var(--spazio-2) 0 var(--spazio-2) var(--spazio-8)}
+.spunte li::before{content:"";position:absolute;left:var(--spazio-1);top:.95em;width:14px;height:8px;border-left:3px solid var(--c-azione);border-bottom:3px solid var(--c-azione);transform:rotate(-45deg) translateY(-50%)}
+.info{margin:0;display:grid}
+.info div{display:grid;gap:var(--spazio-1);padding:var(--spazio-4) 0;border-bottom:1px solid var(--c-bordo)}
+.info div:first-child{border-top:1px solid var(--c-bordo)}
+.info dt{font:600 var(--t-piccolo)/1.3 var(--font-testo);letter-spacing:.12em;text-transform:uppercase;color:var(--c-tenue)}
+.info dd{margin:0}
+@media (min-width:36rem){.info div{grid-template-columns:9rem 1fr;gap:var(--spazio-4)}}
+.pillola{display:inline-block;padding:var(--spazio-1) var(--spazio-3);border-radius:999px;background:var(--c-carta-2);color:var(--c-avviso);font:600 .8125rem/1.4 var(--font-testo)}
+
+/* =====================================================================
+   9. MODULO DI INTERESSE
+   ===================================================================== */
+.partecipa{background:var(--c-carta-2)}
+.partecipa__struttura{display:grid;gap:var(--spazio-10)}
+@media (min-width:60rem){.partecipa__struttura{grid-template-columns:.85fr 1.15fr;gap:var(--spazio-16);align-items:start}.partecipa__lato{position:sticky;top:var(--spazio-20)}}
+.garanzie li{padding:var(--spazio-2) 0 var(--spazio-2) var(--spazio-8);position:relative;color:var(--c-tenue)}
+.garanzie li::before{content:"";position:absolute;left:var(--spazio-1);top:1em;width:14px;height:8px;border-left:3px solid var(--c-azione);border-bottom:3px solid var(--c-azione);transform:rotate(-45deg) translateY(-50%)}
+.modulo{background:var(--c-carta);border-radius:var(--raggio-grande);padding:var(--spazio-6);box-shadow:var(--ombra);border:1px solid var(--c-bordo)}
+@media (min-width:36rem){.modulo{padding:var(--spazio-10)}}
+.campo{margin:0 0 var(--spazio-5)}
+.campo label,.gruppo legend{display:block;margin:0 0 var(--spazio-2);font-weight:600}
+.facoltativo{font-weight:400;color:var(--c-tenue)}
+input[type=text],input[type=email],input[type=tel]{width:100%;min-height:var(--bersaglio);padding:var(--spazio-3) var(--spazio-4);border:2px solid var(--c-bordo);border-radius:var(--raggio);background:var(--c-carta);color:var(--c-testo);font:inherit;transition:border-color var(--feedback)}
+input[type=text]:hover,input[type=email]:hover,input[type=tel]:hover{border-color:var(--c-azione)}
+input[aria-invalid="true"]{border-color:var(--c-errore)}
+.errore-campo{display:none;margin:var(--spazio-2) 0 0;color:var(--c-errore);font-size:var(--t-piccolo);font-weight:600}
+.errore-campo.attivo{display:block}
+.errore-campo::before{content:"! ";font-weight:700}
+.gruppo{border:0;margin:0 0 var(--spazio-6);padding:0;min-width:0}
+.gruppo legend{padding:0;line-height:1.4}
+.opzioni{display:grid;gap:var(--spazio-2)}
+.opzione{position:relative;display:flex;align-items:flex-start;gap:var(--spazio-3);min-height:var(--bersaglio);padding:var(--spazio-3) var(--spazio-4);border:2px solid var(--c-bordo);border-radius:var(--raggio);cursor:pointer;transition:border-color var(--feedback),background var(--feedback)}
+.opzione:hover{border-color:var(--c-azione)}
+.opzione input{flex:none;width:22px;height:22px;margin:2px 0 0;accent-color:var(--c-azione)}
+.opzione:has(input:checked){border-color:var(--c-azione);background:var(--c-carta-2)}
+.opzione:has(input[aria-invalid="true"]){border-color:var(--c-errore)}
+.opzione:has(input:focus-visible){outline:3px solid var(--c-luce);outline-offset:3px}
+.consenso{margin:var(--spazio-6) 0}
+.consenso .opzione{background:var(--c-carta)}
+.consenso small{display:block;margin-top:var(--spazio-1);color:var(--c-tenue);font-size:.8125rem}
+.riepilogo-errori{margin:0 0 var(--spazio-6);padding:var(--spazio-4);border:2px solid var(--c-errore);border-radius:var(--raggio);color:var(--c-errore)}
+.riepilogo-errori p{margin:0 0 var(--spazio-2);font-weight:700}
+.riepilogo-errori ul{padding-left:var(--spazio-5);list-style:disc}
+.riepilogo-errori a{color:var(--c-errore)}
+.trappola{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.invio{display:flex;flex-direction:column;gap:var(--spazio-3)}
+.invio .btn{width:100%;min-height:56px;font-size:var(--t-lead)}
+.invio small{color:var(--c-tenue);text-align:center}
+.rotella{display:none;width:18px;height:18px;border:3px solid currentColor;border-right-color:transparent;border-radius:50%;animation:gira .8s linear infinite}
+.inviando .rotella{display:inline-block}
+@keyframes gira{to{transform:rotate(360deg)}}
+.esito{text-align:left;padding:var(--spazio-2) 0}
+.esito:focus{outline:none}
+.esito h3{color:var(--c-successo);font-size:var(--t-h2)}
+.esito--errore h3{color:var(--c-errore)}
+.esito .btn{margin-top:var(--spazio-4)}
+.germoglio{width:var(--spazio-16);height:var(--spazio-16);margin-bottom:var(--spazio-4);fill:none;stroke:var(--c-azione);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.germoglio path{stroke-dasharray:140;stroke-dashoffset:140;animation:disegna 1.2s .1s ease-out forwards}
+@keyframes disegna{to{stroke-dashoffset:0}}
+
+/* =====================================================================
+   10. CHIUSURA + PIÈ DI PAGINA
+   ===================================================================== */
+.chiusura{background:var(--c-bosco);color:var(--c-su-bosco);text-align:center;padding:var(--spazio-20) 0}
+.chiusura .marchio{display:block;font-size:var(--t-h2);margin-bottom:var(--spazio-6)}
+.chiusura blockquote{margin:0 auto;max-width:34ch;font:italic 500 var(--t-h3)/1.45 var(--font-titolo)}
+.chiusura p{margin:var(--spazio-6) auto 0;color:var(--c-su-bosco-tenue)}
+.piede{background:var(--c-bosco-2);color:var(--c-su-bosco-tenue);padding:var(--spazio-8) 0;font-size:var(--t-piccolo)}
+.piede .contenitore{display:flex;flex-wrap:wrap;gap:var(--spazio-3) var(--spazio-8);justify-content:space-between}
+.piede a{color:var(--c-su-bosco)}
+
+/* Barra di azione fissa su telefono */
+.barra{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:var(--spazio-3) var(--spazio-4) calc(var(--spazio-3) + env(safe-area-inset-bottom));background:var(--c-carta);border-top:1px solid var(--c-bordo);box-shadow:0 -8px 24px rgba(20,40,31,.12);transform:translateY(110%);transition:transform var(--transizione)}
+.barra.visibile{transform:none}
+.barra .btn{width:100%}
+@media (min-width:52rem){.barra{display:none}body{padding-bottom:0}}
+
+/* =====================================================================
+   11. COMPARSA E MOVIMENTO (solo con JS; ridotto su richiesta)
+   ===================================================================== */
+.js .appare{opacity:0;transform:translateY(var(--spazio-5));transition:opacity var(--transizione) ease,transform var(--transizione) ease}
+.js .appare.dentro{opacity:1;transform:none}
+.rete .traccia{stroke-dasharray:1600;stroke-dashoffset:1600;animation:disegna-rete 5s ease-out forwards}
+.rete .traccia:nth-of-type(2n){animation-delay:.6s}
+.rete .traccia:nth-of-type(3n){animation-delay:1.2s}
+@keyframes disegna-rete{to{stroke-dashoffset:0}}
+.rete circle{animation:pulsa 4.5s ease-in-out infinite}
+.rete circle:nth-of-type(2n){animation-delay:1.3s}
+@keyframes pulsa{50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  .js .appare{opacity:1;transform:none}
+  .rete .traccia{stroke-dasharray:none;stroke-dashoffset:0}
+  .germoglio path{stroke-dasharray:none;stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+<a class="salta" href="#principale">Vai al contenuto</a>
+
+<!-- ============================ INTESTAZIONE ============================ -->
+<header class="testata" id="testata">
+  <div class="contenitore testata__riga">
+    <a class="marchio" href="#apertura" aria-label="MICELIO, torna all'inizio">MICELIO</a>
+    <nav aria-label="Principale">
+      <ul>
+        <li><a href="#percorso">Il percorso</a></li>
+        <li><a href="#come">Come lo viviamo</a></li>
+        <li><a href="#info">Informazioni</a></li>
+        <li><a class="btn btn--luce" href="#partecipa">Manifesta<span class="solo-largo">&nbsp;interesse</span></a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="principale">
+
+<!-- ============================ 1. APERTURA ============================ -->
+<section class="apertura" id="apertura" aria-labelledby="titolo-pagina">
+  <!-- FOTO DA SOSTITUIRE: bosco attraversato dalla luce (vedi README: slot immagini) -->
+  <svg class="apertura__alberi alberi" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+    <polygon class="raggio" points="760,0 880,0 620,800 470,800"/>
+    <polygon class="raggio" points="960,0 1040,0 900,800 800,800"/>
+    <rect x="40" y="0" width="46" height="800"/><rect x="150" y="0" width="22" height="800"/>
+    <rect x="1040" y="0" width="52" height="800"/><rect x="1130" y="0" width="26" height="800"/>
+    <rect x="300" y="0" width="14" height="800"/><rect x="560" y="0" width="12" height="800"/>
+  </svg>
+  <svg class="apertura__rete rete" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+    <path class="traccia" d="M600 500C600 430 590 380 540 330S420 270 330 250"/>
+    <path class="traccia" d="M600 500C610 440 650 400 720 360S850 300 940 270"/>
+    <path class="traccia" d="M540 330C520 290 530 240 490 200"/>
+    <path class="traccia" d="M720 360C740 320 730 270 770 230S830 180 850 120"/>
+    <path class="traccia" d="M330 250C280 240 210 250 150 210"/>
+    <path class="traccia" d="M940 270C990 270 1050 250 1120 200"/>
+    <path class="traccia sottile" d="M600 500C560 470 480 450 400 440S250 430 120 380"/>
+    <path class="traccia sottile" d="M600 500C660 480 760 470 860 450S1040 420 1160 440"/>
+    <path class="traccia sottile" d="M490 200C470 160 480 110 450 60"/>
+    <path class="traccia sottile" d="M330 250C310 300 260 330 200 370"/>
+    <path class="traccia sottile" d="M940 270C930 330 970 380 1010 420"/>
+    <circle cx="540" cy="330" r="5"/><circle cx="330" cy="250" r="5"/><circle cx="720" cy="360" r="5"/>
+    <circle cx="940" cy="270" r="5"/><circle cx="490" cy="200" r="4"/><circle cx="770" cy="230" r="4"/>
+    <circle cx="150" cy="210" r="4"/><circle cx="1120" cy="200" r="4"/><circle cx="450" cy="60" r="3"/>
+    <circle cx="850" cy="120" r="4"/><circle cx="200" cy="370" r="3"/><circle cx="1010" cy="420" r="3"/>
+  </svg>
+
+  <div class="contenitore">
+    <h1 id="titolo-pagina">MICELIO</h1>
+    <p class="sottotitolo">Corso esperienziale sulle connessioni viventi</p>
+    <p class="lead promessa">Quattro giorni nel bosco. Un percorso per ritrovare le connessioni che sostengono la vita.</p>
+    <p class="motto">Non siamo visitatori della natura. Siamo parte di essa.</p>
+    <div class="apertura__azioni">
+      <a class="btn btn--luce" href="#partecipa">Voglio partecipare a MICELIO</a>
+      <a class="btn btn--lieve" href="#percorso">Scopri il percorso</a>
+    </div>
+    <p class="apertura__nota">La prima edizione è in fase di organizzazione. Lascia il tuo contatto per ricevere aggiornamenti e informazioni.</p>
+    <ul class="fatti" aria-label="In sintesi">
+      <li>4 giornate nel bosco</li>
+      <li>2 weekend immersivi</li>
+      <li>Sperimentazione nella vita quotidiana tra i due</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================ 2. PERCHÉ ============================ -->
+<section class="sezione" id="perche" aria-labelledby="t-perche">
+  <div class="contenitore perche">
+    <div class="perche__testo appare">
+      <span class="sovratitolo">Perché MICELIO?</span>
+      <h2 id="t-perche">Quante volte entriamo in un bosco senza accorgerci di ciò che lo rende vivo?</h2>
+      <p>Vediamo gli alberi, ascoltiamo gli uccelli, camminiamo tra le foglie. Ma raramente ci soffermiamo sulle relazioni invisibili che collegano ogni elemento: la luce che alimenta le piante, l'acqua che attraversa il suolo, i funghi che collaborano con le radici, l'aria che circola tra gli alberi.</p>
+      <p>La natura non è una semplice somma di elementi. È una rete di relazioni, scambi e trasformazioni.</p>
+      <p class="forte">E noi ne facciamo parte.</p>
+      <p>MICELIO nasce dal desiderio di riscoprire questa appartenenza e portarla oltre il tempo trascorso nel bosco, trasformando il nostro modo di osservare, abitare e vivere il mondo.</p>
+    </div>
+    <svg class="perche__cerchi cerchi appare" viewBox="0 0 320 320" role="img" aria-label="Schema: sole, acqua, suolo e aria sono collegati tra loro e al centro c'è la vita.">
+      <circle class="anello" cx="160" cy="160" r="110"/>
+      <circle class="anello" cx="160" cy="160" r="60"/>
+      <path class="anello" d="M160 50L50 160L160 270L270 160Z"/>
+      <path class="anello" d="M160 50L160 270M50 160L270 160"/>
+      <circle class="nodo nodo--luce" cx="160" cy="50" r="12"/>
+      <circle class="nodo nodo--acqua" cx="270" cy="160" r="12"/>
+      <circle class="nodo nodo--suolo" cx="160" cy="270" r="12"/>
+      <circle class="nodo" cx="50" cy="160" r="12"/>
+      <circle class="nodo" cx="160" cy="160" r="18"/>
+      <text x="160" y="28" text-anchor="middle">Sole</text>
+      <text x="296" y="190" text-anchor="end">Acqua</text>
+      <text x="160" y="304" text-anchor="middle">Suolo</text>
+      <text x="24" y="190" text-anchor="start">Aria</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ============================ 3. MISSIONE ============================ -->
+<section class="sezione missione" id="missione" aria-labelledby="t-missione">
+  <div class="contenitore">
+    <div class="missione__intro appare">
+      <span class="sovratitolo">La nostra missione</span>
+      <h2 id="t-missione">Ritrovare il senso di appartenenza alla rete della vita.</h2>
+      <p class="lead">Vogliamo creare esperienze che aiutino le persone a:</p>
+    </div>
+    <ul class="fili">
+      <li class="appare">Riconoscere le connessioni e le interdipendenze che sostengono la vita.</li>
+      <li class="appare">Sviluppare uno sguardo più attento e consapevole verso gli ecosistemi.</li>
+      <li class="appare">Riscoprire una relazione diretta, sensoriale ed emotiva con la natura.</li>
+      <li class="appare">Imparare dai processi naturali per ripensare il nostro modo di vivere.</li>
+      <li class="appare">Tradurre ciò che scopriamo in piccoli gesti e scelte quotidiane.</li>
+    </ul>
+    <p class="nota-metodo appare">Non vogliamo semplicemente trasmettere informazioni sulla natura, ma creare le condizioni per viverla, sentirla e comprenderla in prima persona.</p>
+  </div>
+</section>
+
+<!-- ============================ 4. PERCORSO ============================ -->
+<section class="sezione" id="percorso" aria-labelledby="t-percorso">
+  <div class="contenitore">
+    <div class="percorso__intro appare">
+      <span class="sovratitolo">Un percorso in due weekend</span>
+      <h2 id="t-percorso">Quattro giornate, quattro porte per entrare nella rete.</h2>
+      <p class="lead">Ogni weekend esplora alcune delle grandi connessioni che rendono possibile la vita. Tra i due incontri, un periodo di sperimentazione personale per portare le scoperte nella quotidianità.</p>
+    </div>
+
+    <div class="tempo">
+      <!-- WEEKEND 1 -->
+      <article class="tappa appare" aria-labelledby="w1">
+        <span class="tappa__etichetta">1° Weekend</span>
+        <h3 class="tappa__titolo" id="w1">Riconoscere le connessioni</h3>
+        <div class="porte">
+          <section class="carta" aria-labelledby="p-sole">
+            <div class="carta__testa">
+              <span class="icona" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="5.5"/><path d="M16 3v4M16 25v4M3 16h4M25 16h4M6.8 6.8l2.8 2.8M22.4 22.4l2.8 2.8M25.2 6.8l-2.8 2.8M9.6 22.4l-2.8 2.8"/></svg></span>
+              <div><span class="carta__giorno">Sabato</span><h4 id="p-sole">Il sole</h4><p class="carta__sotto">L'energia che sostiene la vita</p></div>
+            </div>
+            <p class="domanda">Da dove arriva l'energia che sostiene la vita?</p>
+            <p class="descr">Tutto ciò che vive ha bisogno di energia. Come si trasforma e attraversa gli ecosistemi? Esploreremo il ruolo del sole attraverso osservazioni, esperienze sensoriali e semplici sperimentazioni pratiche.</p>
+            <details class="dettaglio"><summary>Cosa faremo</summary>
+              <ul class="elenco">
+                <li>Osserveremo come luce, calore e ombra trasformano il bosco.</li>
+                <li>Scopriremo il ruolo del sole nei processi che sostengono la vita.</li>
+                <li>Sperimenteremo alcune tecnologie solari, come il forno e l'essiccatore.</li>
+                <li>Rifletteremo su come utilizziamo l'energia nella nostra quotidianità.</li>
+              </ul>
+            </details>
+          </section>
+          <section class="carta" aria-labelledby="p-acqua">
+            <div class="carta__testa">
+              <span class="icona icona--acqua" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 4C16 4 7 14 7 20a9 9 0 0 0 18 0C25 14 16 4 16 4Z"/><path d="M12 21a4 4 0 0 0 4 4"/></svg></span>
+              <div><span class="carta__giorno">Domenica</span><h4 id="p-acqua">L'acqua</h4><p class="carta__sotto">Il viaggio di una risorsa preziosa</p></div>
+            </div>
+            <p class="domanda">Come circolano le risorse e cosa le rende disponibili?</p>
+            <p class="descr">L'acqua attraversa ogni forma di vita. Seguiremo idealmente il viaggio di una goccia per capire il ciclo dell'acqua e quanto dipendiamo dai sistemi che la custodiscono.</p>
+            <details class="dettaglio"><summary>Cosa faremo</summary>
+              <ul class="elenco">
+                <li>Esploreremo le tracce dell'acqua nel paesaggio.</li>
+                <li>Osserveremo come il bosco intercetta, trattiene e distribuisce l'acqua.</li>
+                <li>Sperimenteremo l'infiltrazione e la capacità del suolo di trattenerla.</li>
+                <li>Rifletteremo sul nostro rapporto con questa risorsa.</li>
+              </ul>
+            </details>
+          </section>
+        </div>
+      </article>
+
+      <!-- TRA I DUE WEEKEND -->
+      <article class="tappa tappa--ponte appare" aria-labelledby="ponte">
+        <span class="tappa__etichetta">Tra i due weekend</span>
+        <div class="carta ponte">
+          <h3 id="ponte">Sperimentare nella quotidianità</h3>
+          <p>Le connessioni non si fermano quando lasciamo il bosco. Dopo il primo weekend porteremo a casa un piccolo diario di osservazione e alcune proposte di sperimentazione. Non compiti da svolgere, ma inviti a guardare con occhi diversi ciò che ci circonda.</p>
+          <details class="dettaglio"><summary>Cosa potremo osservare</summary>
+            <ul class="elenco">
+              <li>Come il sole e l'acqua influenzano le nostre giornate.</li>
+              <li>Da dove arrivano le risorse che utilizziamo.</li>
+              <li>Quali piccoli cambiamenti proviamo a introdurre.</li>
+              <li>Quali nuove osservazioni e domande porteremo al secondo weekend.</li>
+            </ul>
+          </details>
+        </div>
+      </article>
+
+      <!-- WEEKEND 2 -->
+      <article class="tappa appare" aria-labelledby="w2">
+        <span class="tappa__etichetta">2° Weekend</span>
+        <h3 class="tappa__titolo" id="w2">Abitare le connessioni</h3>
+        <div class="porte">
+          <section class="carta" aria-labelledby="p-suolo">
+            <div class="carta__testa">
+              <span class="icona" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M3 12h26M3 19h26M3 26h26"/><path d="M16 12V6M16 6c-2-1-3-3-3-4M16 6c2-1 3-3 3-4M9 19v-4M23 19v-4M12 26v-4M20 26v-4"/></svg></span>
+              <div><span class="carta__giorno">Sabato</span><h4 id="p-suolo">Suolo e micelio</h4><p class="carta__sotto">La rete invisibile che sostiene la vita</p></div>
+            </div>
+            <p class="domanda">Quali connessioni invisibili sostengono la vita?</p>
+            <p class="descr">Sotto i nostri piedi esiste un mondo ricchissimo di relazioni. Esploreremo il suolo come un sistema vivente e il micelio come una delle immagini più affascinanti dell'interconnessione.</p>
+            <details class="dettaglio"><summary>Cosa faremo</summary>
+              <ul class="elenco">
+                <li>Esploreremo il suolo e i suoi diversi strati.</li>
+                <li>Osserveremo funghi, radici, humus e materia organica.</li>
+                <li>Scopriremo il ruolo della decomposizione e delle relazioni tra gli organismi.</li>
+                <li>Vivremo un'esperienza di gruppo per rappresentare le reti di interdipendenza.</li>
+                <li>Rifletteremo sulle connessioni invisibili che sostengono anche le nostre comunità.</li>
+              </ul>
+            </details>
+          </section>
+          <section class="carta" aria-labelledby="p-aria">
+            <div class="carta__testa">
+              <span class="icona" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 29V15"/><path d="M16 4c6 3 9 8 9 12a9 9 0 0 1-9 7 9 9 0 0 1-9-7c0-4 3-9 9-12Z"/><path d="M16 19l-4-4M16 15l4-3"/></svg></span>
+              <div><span class="carta__giorno">Domenica</span><h4 id="p-aria">Aria e alberi</h4><p class="carta__sotto">Il respiro del mondo</p></div>
+            </div>
+            <p class="domanda">Come partecipano gli organismi all'equilibrio dell'ecosistema?</p>
+            <p class="descr">Gli alberi non sono elementi isolati. Interagiscono con l'aria, l'acqua, il clima, il suolo e tutti gli organismi che li circondano. Attraverso osservazione e ascolto esploreremo queste relazioni.</p>
+            <details class="dettaglio"><summary>Cosa faremo</summary>
+              <ul class="elenco">
+                <li>Dedicheremo tempo all'osservazione e all'ascolto degli alberi.</li>
+                <li>Scopriremo come influenzano il microclima e il ciclo dell'acqua.</li>
+                <li>Esploreremo il ruolo degli alberi negli scambi con l'atmosfera.</li>
+                <li>Progetteremo insieme un ecosistema immaginario, mettendo in relazione bisogni, risorse e organismi.</li>
+                <li>Concluderemo con una riflessione personale e un impegno da portare nella vita quotidiana.</li>
+              </ul>
+            </details>
+          </section>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 5. COME LO VIVREMO ============================ -->
+<section class="sezione metodo" id="come" aria-labelledby="t-come">
+  <div class="contenitore">
+    <div class="appare">
+      <span class="sovratitolo">Come vivremo l'esperienza</span>
+      <h2 id="t-come">Non un corso in cui si ascolta e si prendono appunti.</h2>
+      <p class="lead">Un percorso in cui si impara facendo esperienza. Alterniamo esplorazione, osservazione, gioco, attività pratiche, condivisione e riflessione. Ogni attività coinvolge tre dimensioni.</p>
+    </div>
+    <ul class="tre">
+      <li class="appare"><h3><span>Testa</span>Comprendere</h3><p>Osservare, fare domande, riconoscere i processi naturali e comprendere le relazioni tra gli elementi.</p></li>
+      <li class="appare"><h3><span>Cuore</span>Sentire</h3><p>Rallentare, ascoltare, entrare in contatto con l'ambiente attraverso i sensi e le emozioni.</p></li>
+      <li class="appare"><h3><span>Mani</span>Agire</h3><p>Sperimentare, costruire, collaborare e imparare attraverso esperienze concrete.</p></li>
+    </ul>
+    <p class="ispirazioni appare">Ci ispiriamo all'apprendimento esperienziale, all'ecologia, alla permacultura e all'osservazione dei modelli presenti in natura. Non si tratta di imparare a fare tutto ciò che la natura fa, ma di imparare a osservare come funziona e cosa possiamo apprendere da essa.</p>
+  </div>
+</section>
+
+<!-- ============================ 6. PER CHI + INFORMAZIONI ============================ -->
+<section class="sezione" id="info" aria-labelledby="t-chi">
+  <div class="contenitore griglia-2">
+    <div class="appare">
+      <span class="sovratitolo">A chi è rivolto</span>
+      <h2 id="t-chi">Per chi sente il desiderio di avvicinarsi alla natura in modo più profondo.</h2>
+      <ul class="spunte">
+        <li>Ama stare all'aperto e vuole sviluppare una relazione più autentica con l'ambiente.</li>
+        <li>È curioso di scoprire come funzionano gli ecosistemi.</li>
+        <li>Desidera rallentare e ritrovare spazio per osservare e ascoltare.</li>
+        <li>Vuole sperimentare nuovi modi di vivere in relazione con le risorse naturali.</li>
+        <li>Cerca un'esperienza condivisa, fatta di scoperta, collaborazione e confronto.</li>
+      </ul>
+      <p class="nota-metodo">Non è necessario avere conoscenze specifiche o esperienze precedenti. Serve soprattutto curiosità e disponibilità a mettersi in gioco.</p>
+    </div>
+    <div class="appare">
+      <span class="sovratitolo">Informazioni sul percorso</span>
+      <h2>Cosa sappiamo, cosa stiamo definendo.</h2>
+      <dl class="info">
+        <div><dt>Durata</dt><dd>4 giornate, distribuite in due weekend.</dd></div>
+        <div><dt>Formula</dt><dd>Primo weekend, periodo di sperimentazione personale, secondo weekend.</dd></div>
+        <div><dt>Luogo</dt><dd>Ambiente boschivo. <span class="pillola">Da definire</span> La località sarà comunicata con le date definitive.</dd></div>
+        <div><dt>Pernottamento</dt><dd>In tenda, presso o nelle vicinanze del luogo dell'esperienza, oppure in strutture ricettive nelle vicinanze.</dd></div>
+        <div><dt>Partecipazione</dt><dd>Il percorso completo è la formula consigliata. Potrai manifestare interesse anche per un singolo weekend, in base ai posti disponibili.</dd></div>
+        <div><dt>Costo</dt><dd><span class="pillola">In definizione</span> Modalità di partecipazione e pagamento saranno comunicate prima dell'iscrizione definitiva.</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 7. MODULO ============================ -->
+<section class="sezione partecipa" id="partecipa" aria-labelledby="t-partecipa">
+  <div class="contenitore partecipa__struttura">
+    <div class="partecipa__lato appare">
+      <span class="sovratitolo">Entra nella rete di MICELIO</span>
+      <h2 id="t-partecipa">Stiamo raccogliendo le manifestazioni di interesse.</h2>
+      <p class="lead">Se senti che questo percorso fa per te, lasciaci i tuoi contatti e raccontaci come vorresti partecipare. Ci aiuterai a organizzare al meglio la prima edizione, e riceverai in anteprima tutte le informazioni.</p>
+      <ul class="garanzie">
+        <li>Non è un'iscrizione vincolante.</li>
+        <li>Nessun obbligo di partecipazione o pagamento.</li>
+        <li>Bastano nome ed email: il resto è facoltativo.</li>
+      </ul>
+    </div>
+
+    <div class="modulo appare" id="area-modulo">
+      <!-- Stato: modulo (predefinito) -->
+      <form id="modulo" novalidate autocomplete="on" aria-labelledby="t-partecipa">
+        <div class="riepilogo-errori" id="riepilogo" role="alert" tabindex="-1" hidden>
+          <p>Controlla questi campi prima di inviare:</p>
+          <ul id="riepilogo-elenco"></ul>
+        </div>
+
+        <div class="campo">
+          <label for="nome">Nome e cognome</label>
+          <input type="text" id="nome" name="nome" autocomplete="name" aria-required="true" aria-describedby="err-nome">
+          <p class="errore-campo" id="err-nome">Scrivi il tuo nome, così sappiamo come chiamarti.</p>
+        </div>
+        <div class="campo">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" autocomplete="email" inputmode="email" aria-required="true" aria-describedby="err-email">
+          <p class="errore-campo" id="err-email">Controlla l'email: manca qualcosa (esempio: nome@dominio.it).</p>
+        </div>
+        <div class="campo">
+          <label for="telefono">Telefono <span class="facoltativo">(facoltativo)</span></label>
+          <input type="tel" id="telefono" name="telefono" autocomplete="tel" inputmode="tel">
+        </div>
+
+        <fieldset class="gruppo">
+          <legend>1. Come vorresti partecipare? <span class="facoltativo">(facoltativo)</span></legend>
+          <div class="opzioni">
+            <label class="opzione"><input type="radio" name="partecipazione" value="percorso completo"><span>Vorrei partecipare all'intero percorso, entrambi i weekend.</span></label>
+            <label class="opzione"><input type="radio" name="partecipazione" value="un weekend"><span>Sarei interessato/a a partecipare a un solo weekend.</span></label>
+            <label class="opzione"><input type="radio" name="partecipazione" value="da decidere"><span>Devo ancora decidere.</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="gruppo">
+          <legend>2. Come preferiresti pernottare? <span class="facoltativo">(facoltativo)</span></legend>
+          <div class="opzioni">
+            <label class="opzione"><input type="radio" name="pernottamento" value="tenda"><span>In tenda, presso o nelle vicinanze del luogo dell'esperienza.</span></label>
+            <label class="opzione"><input type="radio" name="pernottamento" value="struttura"><span>In una struttura ricettiva nelle vicinanze.</span></label>
+            <label class="opzione"><input type="radio" name="pernottamento" value="da decidere"><span>Non ho ancora deciso.</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="gruppo">
+          <legend>3. Quale modalità di pagamento preferiresti? <span class="facoltativo">(facoltativo)</span></legend>
+          <div class="opzioni">
+            <label class="opzione"><input type="radio" name="pagamento" value="unica soluzione"><span>Pagamento in un'unica soluzione.</span></label>
+            <label class="opzione"><input type="radio" name="pagamento" value="due rate"><span>Pagamento in due rate, una per ciascun weekend.</span></label>
+            <label class="opzione"><input type="radio" name="pagamento" value="dipende dal costo"><span>Dipende dal costo complessivo e dalle modalità proposte.</span></label>
+            <label class="opzione"><input type="radio" name="pagamento" value="nessuna preferenza"><span>Non ho ancora una preferenza.</span></label>
+          </div>
+        </fieldset>
+
+        <div class="consenso">
+          <label class="opzione"><input type="checkbox" id="consenso" name="consenso" aria-required="true" aria-describedby="err-consenso">
+            <span>Acconsento a essere ricontattato/a per ricevere informazioni relative a MICELIO.
+              <small>Useremo questo consenso solo per questo scopo. <a href="#privacy" id="vai-privacy">Informativa privacy</a>.</small></span></label>
+          <p class="errore-campo" id="err-consenso">Per poterti scrivere ci serve il tuo consenso: spunta la casella.</p>
+        </div>
+
+        <!-- Campo trappola per i bot: le persone non lo vedono né lo compilano -->
+        <div class="trappola" aria-hidden="true"><label>Non compilare<input type="text" name="sito_web" tabindex="-1" autocomplete="off"></label></div>
+
+        <div class="invio">
+          <button class="btn" type="submit" id="invia"><span class="rotella" aria-hidden="true"></span><span id="invia-testo">Invia la mia manifestazione di interesse</span></button>
+          <small>La manifestazione di interesse non comporta alcun obbligo di partecipazione o pagamento.</small>
+        </div>
+      </form>
+
+      <!-- Stato: successo -->
+      <div class="esito" id="esito-ok" tabindex="-1" hidden>
+        <svg class="germoglio" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 58V30M32 30C22 28 14 20 12 8c12 0 20 8 20 22ZM32 40c8-1 15-7 18-16-10 0-17 6-18 16Z"/></svg>
+        <h3 id="esito-ok-titolo">Grazie, il tuo filo è entrato nella rete.</h3>
+        <p>Abbiamo ricevuto la tua manifestazione di interesse. Ti scriveremo non appena avremo le date, il luogo e i costi della prima edizione.</p>
+        <p>Nel frattempo, la prossima volta che sei in un bosco, prova a fermarti due minuti e a guardare cosa collega ciò che vedi.</p>
+        <a class="btn btn--lieve" href="#apertura">Torna all'inizio</a>
+      </div>
+
+      <!-- Stato: errore di invio -->
+      <div class="esito esito--errore" id="esito-err" tabindex="-1" hidden>
+        <h3>Non siamo riusciti a inviare.</h3>
+        <p id="esito-err-testo">C'è stato un problema di connessione. I tuoi dati sono ancora qui: riprova tra un momento.</p>
+        <button class="btn" type="button" id="riprova">Riprova a inviare</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 8. CHIUSURA ============================ -->
+<section class="chiusura" aria-label="Chiusura">
+  <div class="contenitore appare">
+    <span class="marchio">MICELIO</span>
+    <blockquote>La vita non è fatta di elementi separati, ma di relazioni.</blockquote>
+    <p>Imparare a riconoscerle è il primo passo per tornare a sentirci parte della rete che sostiene ogni forma di vita.</p>
+  </div>
+</section>
+</main>
+
+<footer class="piede">
+  <div class="contenitore">
+    <span>© MICELIO · Prima edizione in organizzazione</span>
+    <span id="privacy">Informativa privacy: <em>da collegare</em> (titolare del trattamento e contatto da inserire prima della pubblicazione).</span>
+  </div>
+</footer>
+
+<!-- Barra fissa su telefono: un solo gesto per arrivare al modulo -->
+<div class="barra" id="barra" aria-hidden="true">
+  <a class="btn" href="#partecipa" tabindex="-1">Voglio partecipare a MICELIO</a>
+</div>
+
+<script>
+/* =====================================================================
+   CONFIGURAZIONE — da compilare prima di pubblicare
+   endpoint: URL che riceve il modulo (es. Formspree, Netlify Forms, Google Apps Script).
+   Finché è vuoto il modulo NON invia nulla e lo dice con onestà all'utente.
+   Per vedere gli stati di successo in anteprima, aggiungi ?demo=ok all'indirizzo
+   (oppure ?demo=errore per provare l'errore).
+   ===================================================================== */
+const CONFIG = {
+  endpoint: "",          // TODO: es. "https://formspree.io/f/xxxxxxx"
+  metodo: "POST"
+};
+
+const $ = (s, c = document) => c.querySelector(s);
+const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+
+/* ---------- Intestazione piena dopo l'apertura ---------- */
+const testata = $('#testata'), apertura = $('#apertura'), barra = $('#barra');
+function aggiornaTestata(){ testata.classList.toggle('piena', window.scrollY > 24); }
+aggiornaTestata();
+window.addEventListener('scroll', aggiornaTestata, {passive:true});
+
+/* ---------- Comparsa dolce dei blocchi ---------- */
+if ('IntersectionObserver' in window){
+  const oss = new IntersectionObserver(voci => voci.forEach(v => {
+    if (v.isIntersecting){ v.target.classList.add('dentro'); oss.unobserve(v.target); }
+  }), {threshold:.12, rootMargin:'0px 0px -6% 0px'});
+  $$('.appare').forEach(e => oss.observe(e));
+} else { $$('.appare').forEach(e => e.classList.add('dentro')); }
+
+/* ---------- Barra fissa: visibile dopo l'apertura, nascosta sul modulo ---------- */
+let fuoriApertura = false, sulModulo = false;
+function aggiornaBarra(){
+  const vis = fuoriApertura && !sulModulo;
+  barra.classList.toggle('visibile', vis);
+  barra.setAttribute('aria-hidden', vis ? 'false' : 'true');
+  $('a', barra).tabIndex = vis ? 0 : -1;
+}
+if ('IntersectionObserver' in window){
+  new IntersectionObserver(([v]) => { fuoriApertura = !v.isIntersecting; aggiornaBarra(); }, {threshold:0}).observe(apertura);
+  new IntersectionObserver(([v]) => { sulModulo = v.isIntersecting; aggiornaBarra(); }, {threshold:.1}).observe($('#partecipa'));
+}
+
+/* ---------- Modulo ---------- */
+const modulo = $('#modulo'), riepilogo = $('#riepilogo'), elencoErr = $('#riepilogo-elenco');
+const bottone = $('#invia'), testoBottone = $('#invia-testo');
+const okBox = $('#esito-ok'), errBox = $('#esito-err');
+const ETICHETTE = {nome:'Nome e cognome', email:'Email', consenso:'Consenso al ricontatto'};
+let inInvio = false;
+
+const emailValida = v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
+
+function regole(){
+  return {
+    nome:    () => $('#nome').value.trim().length >= 2,
+    email:   () => emailValida($('#email').value),
+    consenso:() => $('#consenso').checked
+  };
+}
+function segna(campo, ok){
+  const el = $('#' + campo), msg = $('#err-' + campo);
+  el.setAttribute('aria-invalid', ok ? 'false' : 'true');
+  msg.classList.toggle('attivo', !ok);
+}
+function valida(){
+  const r = regole(), errori = [];
+  Object.keys(r).forEach(c => { const ok = r[c](); segna(c, ok); if (!ok) errori.push(c); });
+  return errori;
+}
+// Correzione in tempo reale solo dopo il primo errore: niente rimproveri mentre si scrive.
+['nome','email'].forEach(c => {
+  $('#' + c).addEventListener('blur', () => { if ($('#' + c).value) segna(c, regole()[c]()); });
+  $('#' + c).addEventListener('input', () => { if ($('#' + c).getAttribute('aria-invalid') === 'true') segna(c, regole()[c]()); });
+});
+$('#consenso').addEventListener('change', () => { if ($('#err-consenso').classList.contains('attivo')) segna('consenso', $('#consenso').checked); });
+
+function mostra(stato){
+  modulo.hidden = stato !== 'modulo';
+  okBox.hidden = stato !== 'successo';
+  errBox.hidden = stato !== 'errore';
+  const box = stato === 'successo' ? okBox : stato === 'errore' ? errBox : null;
+  if (box){ box.focus({preventScroll:true}); $('#area-modulo').scrollIntoView({behavior:'smooth', block:'center'}); }
+}
+function impostaInvio(attivo){
+  inInvio = attivo;
+  bottone.disabled = attivo;
+  bottone.classList.toggle('inviando', attivo);
+  bottone.setAttribute('aria-busy', attivo ? 'true' : 'false');
+  testoBottone.textContent = attivo ? 'Invio in corso…' : 'Invia la mia manifestazione di interesse';
+}
+function datiModulo(){
+  const d = new FormData(modulo), o = {};
+  d.forEach((v, k) => { if (k !== 'consenso') o[k] = v; });
+  o.consenso = $('#consenso').checked ? 'sì' : 'no';
+  o.inviato_il = new Date().toISOString();
+  return o;
+}
+const attesa = ms => new Promise(r => setTimeout(r, ms));
+
+async function spedisci(){
+  const demo = new URLSearchParams(location.search).get('demo');
+  if (demo === 'ok'){ await attesa(900); return {ok:true}; }
+  if (demo === 'errore'){ await attesa(900); return {ok:false, motivo:'rete'}; }
+  if (!CONFIG.endpoint){ return {ok:false, motivo:'non-configurato'}; }
+  try {
+    const r = await fetch(CONFIG.endpoint, {
+      method: CONFIG.metodo,
+      headers: {'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify(datiModulo())
+    });
+    return r.ok ? {ok:true} : {ok:false, motivo:'server'};
+  } catch (e) { return {ok:false, motivo:'rete'}; }
+}
+
+modulo.addEventListener('submit', async e => {
+  e.preventDefault();
+  if (inInvio) return;
+  // Trappola anti-bot: finge successo senza inviare.
+  if (modulo.elements.sito_web.value){ mostra('successo'); return; }
+
+  const errori = valida();
+  if (errori.length){
+    elencoErr.innerHTML = '';
+    errori.forEach(c => {
+      const li = document.createElement('li'), a = document.createElement('a');
+      a.href = '#' + c; a.textContent = ETICHETTE[c];
+      a.addEventListener('click', ev => { ev.preventDefault(); $('#' + c).focus(); });
+      li.appendChild(a); elencoErr.appendChild(li);
+    });
+    riepilogo.hidden = false; riepilogo.focus();
+    return;
+  }
+  riepilogo.hidden = true;
+  impostaInvio(true);
+  const esito = await spedisci();
+  impostaInvio(false);
+  if (esito.ok){ mostra('successo'); return; }
+  $('#esito-err-testo').textContent =
+    esito.motivo === 'non-configurato'
+      ? 'L\'invio online non è ancora attivo su questa pagina. I tuoi dati non sono stati inviati: riprova più tardi.'
+      : esito.motivo === 'server'
+        ? 'Il nostro server non ha accettato l\'invio. I tuoi dati sono ancora qui: riprova tra un momento.'
+        : 'Sembra mancare la connessione. I tuoi dati sono ancora qui: riprova appena torna la rete.';
+  mostra('errore');
+});
+$('#riprova').addEventListener('click', () => { mostra('modulo'); $('#invia').focus(); });
+</script>
+</body>
+</html>
